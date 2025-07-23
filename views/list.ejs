@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo list</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<script>
+    function toggleUpdate(index) {
+      const form = document.getElementById(`update-form-${index}`);
+      form.style.display = form.style.display === "none" ? "block" : "none";
+    }
+  </script>
+    <div class="box">
+        <h1>ToDo List</h1>
+    </div>
+    <div class="box">
+        <form action="/" method="post" onsubmit="return validateForm()">
+            <input id= "todoInput" type="text" name = "Todo" placeholder="enter your task">
+            <select name="priority" id="priority">
+                 <option value="high">High</option>
+                <option value="medium">Medium</option>
+               <option value="low">Low</option>
+             </select>
+            <button>+</button>
+        </form>
+        <form method="GET" action="/">
+       <label for="priorityFilter">Filter by Priority:</label>
+      <select name="priority" id="priorityFilter" onchange="this.form.submit()">
+      <option value="all" <%= selectedPriority === 'all' ? 'selected' : '' %>>All</option>
+      <option value="high" <%= selectedPriority === 'high' ? 'selected' : '' %>>High</option>
+     <option value="medium" <%= selectedPriority === 'medium' ? 'selected' : '' %>>Medium</option>
+     <option value="low" <%= selectedPriority === 'low' ? 'selected' : '' %>>Low</option>
+   </select>
+</form> 
+    </div>
+    <div>
+        <%for(var i = 0;i < items.length; i++){%>
+            <div class="content">
+                <input id="task-<%= i %>" type="checkbox">
+                <p for="task-<%= i %>"><strong><%=items[i].item%></strong>- <%= items[i].priority %></p>
+
+                <button onclick="toggleUpdate('<%= i %>')" class="editbtn">✏️</button>
+                <form id="update-form-<%= i %>" class="update-form" action="/update/<%=items[i]._id%>" method="POST">
+               <input type="text" name="updatedTask" value="<%= items[i].item %>">
+             <button type="submit">Update</button>
+            </form>
+
+              <form action="/delete/<%=items[i]._id%>" method="POST">
+             <button class=" removebtn" type="submit">-</button>
+             </form>
+            </div>
+        <%}%>
+    </div> 
+    <script>
+  function validateForm() {
+    const input = document.getElementById("todoInput").value.trim();
+
+    if (input === "") {
+      alert("Please enter a task name.");
+      return false; 
+    }
+
+    return true; 
+  }
+</script>
+
+</body>
+</html>
