@@ -6,6 +6,9 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.static('public'));
 const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://bhavanapolimetla9133:ToDoLists@cluster0.wpzzq7r.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
+mongoose.connection.on('connected', () => {
+  console.log(' Connected to MongoDB Atlas');
+});
 const taskSchema = new mongoose.Schema({
   item: {
     type: String,
