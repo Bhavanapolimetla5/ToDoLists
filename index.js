@@ -1,9 +1,12 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const methodOverride = require('method-override');
+
 var app = express();
 app.set('view engine','ejs');
 app.use(express.urlencoded({extended:true}));
 app.use(express.static('public'));
+app.use(methodOverride('_method'));
 const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://bhavanapolimetla9133:ToDoLists@cluster0.wpzzq7r.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
 mongoose.connection.on('connected', () => {
@@ -53,12 +56,12 @@ app.post('/',async(req,res)=>{
     }
     res.redirect("/");
 })
-app.post('/delete/:id',async(req,res)=>{
+app.delete('/delete/:id',async(req,res)=>{
    const id = req.params.id;
    await Task.findByIdAndDelete(id);
    res.redirect('/')
 })
-app.post('/update/:id',async(req,res)=>{
+app.put('/update/:id',async(req,res)=>{
   const id = req.params.id;
   const updatedTask = req.body.updatedTask;
   if (updatedTask.trim() !== "") {
